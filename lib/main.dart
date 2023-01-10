@@ -1,34 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:tomodoro/screens/homescreen.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
 
   @override
-  State<MyApp> createState() => _MyAppState();
-
-}
-
-class _MyAppState extends State<MyApp> {
-
-  @override
   Widget build(BuildContext context) {
-    
+
     return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.
-            center,
-            children: const [
-              Text('Hello World')
-            ],
-          ),
+      theme: ThemeData(
+        backgroundColor: const Color(0xffe7626c),
+        textTheme: const TextTheme(
+          headline1: TextStyle(
+            color: Color(0xff232b55)
+          )
         ),
+        cardColor: const Color(0xddd4eddb),
+      ),
+      home: HomeScreen(
       ),
     );
   }
