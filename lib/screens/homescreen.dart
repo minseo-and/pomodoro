@@ -11,17 +11,35 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   static const twentyFiveMinutes = 1500;
+  static const fiveMinuies = 300;
   int totalSeconds = twentyFiveMinutes;
   bool isRunning = false;
+  bool isStudy = true;
   int totalPomodoros = 0;
   late Timer timer;
 
   void onTick(Timer timer) {
     if(totalSeconds == 0){
       setState(() {
-        totalPomodoros++;
         isRunning = false;
-        totalSeconds = twentyFiveMinutes;
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: Text(isStudy ? '5분 휴식' : '공부할 시간'),
+                actions: [
+                  ElevatedButton
+                  (
+                    onPressed:(){
+                      isStudy = !isStudy;
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('확인'))
+                ],
+              );
+            });
+
+        isStudy ? {totalSeconds = twentyFiveMinutes, totalPomodoros++} : totalSeconds = fiveMinuies;
       });
       timer.cancel();
     } else {
@@ -64,12 +82,22 @@ class _HomeScreenState extends State<HomeScreen> {
               flex: 1,
               child: Container(
                 alignment: Alignment.bottomCenter,
-                child: Text(
-                  format(totalSeconds),
-                  style: TextStyle(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(isStudy ? '공부 할 시간' : '5분 휴식',
+                    style: TextStyle(
                       color: Theme.of(context).cardColor,
-                      fontSize: 89,
-                      fontWeight: FontWeight.w600),
+                      fontSize: 20,
+                    ),),
+                    Text(
+                      format(totalSeconds),
+                      style: TextStyle(
+                          color: Theme.of(context).cardColor,
+                          fontSize: 89,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
                 ),
               )),
           Flexible(
@@ -86,45 +114,49 @@ class _HomeScreenState extends State<HomeScreen> {
               )),
           Flexible(
               flex: 1,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '시간 관리',
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .headline1!
-                                    .color),
-                          ),
-                          Text(
-                            '$totalPomodoros',
-                            style: TextStyle(
-                                fontSize: 58,
-                                fontWeight: FontWeight.w600,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .headline1!
-                                    .color),
-                          ),
-                        ],
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '시간 관리',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline1!
+                                      .color),
+                            ),
+                            Text(
+                              '$totalPomodoros',
+                              style: TextStyle(
+                                  fontSize: 58,
+                                  fontWeight: FontWeight.w600,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline1!
+                                      .color),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               )),
         ],
       ),
     );
+
   }
 }
